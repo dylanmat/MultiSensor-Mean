@@ -4,7 +4,7 @@ import groovy.transform.Field
 @Field static final String APP_BRANCH = "work"
 @Field static final String APP_UPDATED = "2025-11-01"
 @Field static final String APP_NAME_BASE = "MultiSensor Mean"
-@Field static final String DEVICE_NAME = "${APP_NAME_BASE} Child Device"
+@Field static final String DEVICE_NAME = APP_NAME_BASE + " Child Device"
 
 /**
  *  ${DEVICE_NAME}
