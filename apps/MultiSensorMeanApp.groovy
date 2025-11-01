@@ -3,11 +3,14 @@ import groovy.transform.Field
 @Field static final String APP_VERSION = "0.0.5"
 @Field static final String APP_BRANCH = "work"
 @Field static final String APP_UPDATED = "2025-11-01"
-@Field static final String APP_NAME_BASE = "MultiSenor Mean"
-@Field static final String APP_NAME = APP_BRANCH == "main" ? APP_NAME_BASE : "${APP_NAME_BASE} Test"
+@Field static final String APP_NAME_BASE = "MultiSensor Mean"
+@Field static final String APP_NAME = "MultiSensor Mean App"
+@Field static final String CHILD_APP_NAME = "MultiSensor Mean Group"
+@Field static final String APP_NAMESPACE = "multisensor.mean.app"
+@Field static final String CHILD_APP_NAMESPACE = "multisensor.mean.group"
 
 /**
- *  ${APP_NAME}
+ *  MultiSensor Mean App
  *  Version: ${APP_VERSION}
  *  Branch: ${APP_BRANCH}
  *  Last Updated: ${APP_UPDATED}
@@ -15,7 +18,7 @@ import groovy.transform.Field
 
 definition(
     name: APP_NAME,
-    namespace: "multisensor.mean",
+    namespace: APP_NAMESPACE,
     author: "OpenAI Assistant",
     description: "Create child devices that track the average of multiple environmental sensors.",
     category: "Convenience",
@@ -35,7 +38,7 @@ def mainPage() {
         }
         section("Child Devices") {
             paragraph "Create one or more averaged sensor devices. Each child device can average temperature, humidity, illuminance, and UV index across any set of compatible sensors."
-            app(name: "childDevices", appName: "${APP_NAME} Group", namespace: "multisensor.mean", title: "Add a new MultiSensor Mean child", multiple: true)
+            app(name: "childDevices", appName: CHILD_APP_NAME, namespace: CHILD_APP_NAMESPACE, title: "Add a new MultiSensor Mean child", multiple: true)
         }
     }
 }
