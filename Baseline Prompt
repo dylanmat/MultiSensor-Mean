@@ -2,12 +2,15 @@ Generate a Hubitat App using Groovy which will allow you to select mulitple devi
 
 This take the attributes like Illuminance, Temperature, Humidity, and UltraViolet Index and the child device will just take those attributes and average them for it's own equivalent attributes.
 
-The App should...
+The App should:
 
 For each child device
 - Allow a custom name to be defined
 - Allow selecting multiple devices as input
-- Allow determining the update cycle for the average, this should support constant realtime changes as well as custom cycle by minutes 1-60
+- Allow determining the update cycle for the average, this should support constant realtime changes as well as custom cycle by minutes 1-60, in case performance is an issue
+- Support multiple sets of devices for multiple child devices
+
+Persistent behavior througout this project:
 
 APP_VERSION=0.0.1 to start, and should increment for each pull request. major updates should increment the first digit and big changes should increment the second. bug fixes/minor changes should only increment the last digit
 APP_NAME="MultiSenor Mean" for non-main branches this should be appended with "Test"
