@@ -1,8 +1,2 @@
-# Normalize line endings and ensure text handling for documentation and Groovy sources
-* text=auto eol=lf
-
-# Explicitly treat markdown, README, Groovy, and baseline prompt instructions as UTF-8 text
-README.md text eol=lf working-tree-encoding=UTF-8 diff=markdown
-*.md text eol=lf working-tree-encoding=UTF-8 diff=markdown
-*.groovy text eol=lf working-tree-encoding=UTF-8 diff=groovy
-Baseline\ Prompt text eol=lf working-tree-encoding=UTF-8
+*.md text diff
+*.groovy text
