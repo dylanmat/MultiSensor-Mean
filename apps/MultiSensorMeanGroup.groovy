@@ -4,10 +4,11 @@ import groovy.transform.Field
 @Field static final String APP_BRANCH = "work"
 @Field static final String APP_UPDATED = "2025-11-01"
 @Field static final String APP_NAME_BASE = "MultiSensor Mean"
-@Field static final String GROUP_APP_NAME = "MultiSensor Mean Group"
+@Field static final String GROUP_APP_NAME = "MultiSensorMeanGroup"
+@Field static final String GROUP_APP_DISPLAY_NAME = "MultiSensor Mean Group"
 @Field static final String APP_NAMESPACE = "multisensor.mean.group"
 @Field static final String PARENT_APP_NAMESPACE = "multisensor.mean.app"
-@Field static final String PARENT_APP_CLASS = "MultiSensorMeanApp"
+@Field static final String PARENT_APP_NAME = "MultiSensorMeanApp"
 
 /**
  *  MultiSensor Mean Group
@@ -21,7 +22,7 @@ definition(
     namespace: APP_NAMESPACE,
     author: "OpenAI Assistant",
     description: "Group configuration for MultiSensor Mean child devices.",
-    parent: "${PARENT_APP_NAMESPACE}.${PARENT_APP_CLASS}"
+    parent: PARENT_APP_NAMESPACE + "." + PARENT_APP_NAME
 )
 
 preferences {
@@ -29,7 +30,7 @@ preferences {
 }
 
 def mainPage() {
-    dynamicPage(name: "mainPage", title: GROUP_APP_NAME, install: true, uninstall: true) {
+    dynamicPage(name: "mainPage", title: GROUP_APP_DISPLAY_NAME, install: true, uninstall: true) {
         section("Group Configuration") {
             label title: "Child device name", required: true, defaultValue: state?.childLabel
             input "monitoredDevices", "capability.sensor", title: "Select devices to average", multiple: true, required: true, submitOnChange: true
@@ -45,12 +46,12 @@ def mainPage() {
 }
 
 def installed() {
-    log.info "Installed ${GROUP_APP_NAME} v${APP_VERSION}"
+    log.info "Installed ${GROUP_APP_DISPLAY_NAME} v${APP_VERSION}"
     initialize()
 }
 
 def updated() {
-    log.info "Updated ${GROUP_APP_NAME} v${APP_VERSION}"
+    log.info "Updated ${GROUP_APP_DISPLAY_NAME} v${APP_VERSION}"
     unschedule()
     unsubscribe()
     initialize()
