@@ -3,21 +3,24 @@ import groovy.transform.Field
 @Field static final String APP_VERSION = "0.0.5"
 @Field static final String APP_BRANCH = "work"
 @Field static final String APP_UPDATED = "2025-11-01"
-@Field static final String APP_NAME_BASE = "MultiSenor Mean"
-@Field static final String APP_NAME = APP_BRANCH == "main" ? APP_NAME_BASE : "${APP_NAME_BASE} Test"
+@Field static final String APP_NAME_BASE = "MultiSensor Mean"
+
+String getAppName() {
+    return APP_BRANCH == "main" ? APP_NAME_BASE : "${APP_NAME_BASE} Test"
+}
 
 /**
- *  ${APP_NAME} Group
+ *  MultiSensor Mean Group (branch-aware)
  *  Version: ${APP_VERSION}
  *  Branch: ${APP_BRANCH}
  *  Last Updated: ${APP_UPDATED}
  */
 
 definition(
-    name: "${APP_NAME} Group",
+    name: "${appName} Group",
     namespace: "multisensor.mean",
     author: "OpenAI Assistant",
-    description: "Group configuration for ${APP_NAME} child devices.",
+    description: "Group configuration for ${appName} child devices.",
     parent: "multisensor.mean.MultiSensorMeanApp"
 )
 
@@ -26,7 +29,7 @@ preferences {
 }
 
 def mainPage() {
-    dynamicPage(name: "mainPage", title: "${APP_NAME} Group", install: true, uninstall: true) {
+    dynamicPage(name: "mainPage", title: "${appName} Group", install: true, uninstall: true) {
         section("Group Configuration") {
             label title: "Child device name", required: true, defaultValue: state?.childLabel
             input "monitoredDevices", "capability.sensor", title: "Select devices to average", multiple: true, required: true, submitOnChange: true
@@ -42,12 +45,12 @@ def mainPage() {
 }
 
 def installed() {
-    log.info "Installed ${APP_NAME} Group v${APP_VERSION}"
+    log.info "Installed ${appName} Group v${APP_VERSION}"
     initialize()
 }
 
 def updated() {
-    log.info "Updated ${APP_NAME} Group v${APP_VERSION}"
+    log.info "Updated ${appName} Group v${APP_VERSION}"
     unschedule()
     unsubscribe()
     initialize()
@@ -182,7 +185,7 @@ private String childDeviceNetworkId() {
 }
 
 private getChildDeviceLabel() {
-    return app.getLabel() ?: state.childLabel ?: "${APP_NAME} Average ${app.id}"
+    return app.getLabel() ?: state.childLabel ?: "${appName} Average ${app.id}"
 }
 
 private ensureChildDevice() {
