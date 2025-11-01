@@ -4,14 +4,15 @@ This take the attributes like Illuminance, Temperature, Humidity, and UltraViole
 
 The App should...
 
-For each child device, allow a custom name to be defined
-- Allow selecting multiple devices per child device
+For each child device
+- Allow a custom name to be defined
+- Allow selecting multiple devices as input
 - Allow determining the update cycle for the average, this should support constant realtime changes as well as custom cycle by minutes 1-60
 
-APP_VERSION=0.0.1 and should increment for each pull request. major updates should increment the first digit and big changes should increment the second. bug fixes/minor changes should only increment the last digit
-APP_NAME="MultiSenor Mean" for non-main branches this should be appending with "Test"
-APP_BRANCH="main" this should be updated for each pull request with the name of the new branch, restoring it once the merge to main occurs
+APP_VERSION=0.0.1 to start, and should increment for each pull request. major updates should increment the first digit and big changes should increment the second. bug fixes/minor changes should only increment the last digit
+APP_NAME="MultiSenor Mean" for non-main branches this should be appended with "Test"
+APP_BRANCH="main" this should be updated for each pull request with the name of the new branch, restoring to main once the merge to main occurs
 APP_UPDATED=Should be the date of the last modification in PDT/PST
 
-README.md should be updated to contain basic usage instructions and append each version change to the end like a change log.
+README.md should be updated to contain basic usage instructions and append each version change like a change log.
 
