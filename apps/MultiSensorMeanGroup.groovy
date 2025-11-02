@@ -152,7 +152,7 @@ def updateAverages() {
     }
 }
 
-private static final List<String> AVERAGED_ATTRIBUTES = [
+@Field static final List<String> AVERAGED_ATTRIBUTES = [
     "temperature",
     "humidity",
     "illuminance",
