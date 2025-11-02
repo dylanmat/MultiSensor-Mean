@@ -7,8 +7,6 @@ import groovy.transform.Field
 @Field static final String GROUP_APP_NAME = "MultiSensorMeanGroup"
 @Field static final String GROUP_APP_DISPLAY_NAME = "MultiSensor Mean Group"
 @Field static final String APP_NAMESPACE = "multisensor.mean.group"
-@Field static final String PARENT_APP_NAMESPACE = "multisensor.mean.app"
-@Field static final String PARENT_APP_NAME = "MultiSensorMeanApp"
 
 /**
  *  MultiSensor Mean Group
@@ -22,7 +20,7 @@ definition(
     namespace: APP_NAMESPACE,
     author: "OpenAI Assistant",
     description: "Group configuration for MultiSensor Mean child devices.",
-    parent: PARENT_APP_NAMESPACE + "." + PARENT_APP_NAME
+    parent: "multisensor.mean.app.MultiSensorMeanApp"
 )
 
 preferences {
