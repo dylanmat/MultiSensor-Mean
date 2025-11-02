@@ -33,8 +33,8 @@ The created child device automatically updates its own temperature, humidity, il
 - **Last Updated (PST/PDT):** 2025-11-01
 
 ## Changelog
-- **0.0.5** – Simplified `.gitattributes` so Markdown and Groovy sources are explicitly treated as text, eliminating binary file errors during PR creation.
-- **0.0.4** – Force all repository sources and prompts to be treated as UTF-8 text so PR tooling no longer flags binary files; incremented app and driver version metadata.
-- **0.0.3** – Normalized repository attributes so README and Groovy sources are tracked as UTF-8 text and updated app version metadata.
+- **0.0.5** – Ensure real-time subscriptions and averaging only operate on attributes each device actually supports, and expose the averaged attribute list with `@Field` so Hubitat accepts the declaration.
+- **0.0.4** – Added default labels for the parent and child apps and preserved custom names so they survive installs and updates.
+- **0.0.3** – Defined SmartApp icons and the explicit parent reference used when creating child group apps.
 - **0.0.2** – Expanded installation/configuration guidance and version metadata; incremented app version constants.
 - **0.0.1** – Initial release providing averaged multi-sensor child devices with configurable update cadence.
