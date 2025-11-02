@@ -90,10 +90,9 @@ private void configureAutomation() {
 
     if (state.updateMode == "realtime") {
         monitoredDevices.each { device ->
-            subscribe(device, "temperature", "handleDeviceEvent")
-            subscribe(device, "humidity", "handleDeviceEvent")
-            subscribe(device, "illuminance", "handleDeviceEvent")
-            subscribe(device, "ultravioletIndex", "handleDeviceEvent")
+            supportedAveragingAttributes(device).each { attribute ->
+                subscribe(device, attribute, "handleDeviceEvent")
+            }
         }
     } else if (state.updateMode == "scheduled" && (refreshMinutes ?: state.refreshMinutes)) {
         Integer minutes = (refreshMinutes ?: state.refreshMinutes ?: 5) as Integer
@@ -124,19 +123,19 @@ def updateAverages() {
         return
     }
 
-    Map<String, Map<String, Object>> aggregates = [
-        temperature: [values: [], unit: null],
-        humidity: [values: [], unit: null],
-        illuminance: [values: [], unit: null],
-        ultravioletIndex: [values: [], unit: null]
-    ]
+    Map<String, Map<String, Object>> aggregates = [:]
 
     monitoredDevices.each { device ->
-        aggregates.each { attr, data ->
-            def currentState = device.currentState(attr)
+        supportedAveragingAttributes(device).each { String attribute ->
+            def currentState = device.currentState(attribute)
             if (currentState?.value != null) {
                 BigDecimal numericValue = safeToBigDecimal(currentState.value)
                 if (numericValue != null) {
+                    Map<String, Object> data = aggregates[attribute]
+                    if (!data) {
+                        data = [values: [], unit: null]
+                        aggregates[attribute] = data
+                    }
                     data.values << numericValue
                     data.unit = currentState.unit ?: data.unit
                 }
@@ -150,6 +149,48 @@ def updateAverages() {
             String unit = data.unit
             child.sendEvent(name: attr, value: formatValue(average, attr), unit: unit)
         }
+    }
+}
+
+private static final List<String> AVERAGED_ATTRIBUTES = [
+    "temperature",
+    "humidity",
+    "illuminance",
+    "ultravioletIndex"
+]
+
+private List<String> supportedAveragingAttributes(device) {
+    if (!device) {
+        return []
+    }
+
+    Set<String> supported = [] as Set
+    def rawAttributes = []
+    try {
+        rawAttributes = device?.supportedAttributes ?: []
+    } catch (MissingMethodException ignored) {
+        rawAttributes = []
+    }
+
+    rawAttributes?.each { attr ->
+        String name = attr?.name
+        if (name) {
+            supported << name
+        }
+    }
+
+    if (supported && supported.size() > 0) {
+        return AVERAGED_ATTRIBUTES.findAll { supported.contains(it) }
+    }
+
+    AVERAGED_ATTRIBUTES.findAll { attributeName ->
+        boolean hasAttribute = false
+        try {
+            hasAttribute = device?.hasAttribute(attributeName)
+        } catch (MissingMethodException ignored) {
+            hasAttribute = false
+        }
+        hasAttribute
     }
 }
 
