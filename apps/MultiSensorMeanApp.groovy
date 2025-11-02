@@ -37,6 +37,9 @@ preferences {
 
 def mainPage() {
     dynamicPage(name: "mainPage", title: APP_DISPLAY_NAME, install: true, uninstall: true) {
+        section("App Name") {
+            label title: "Application name", required: true, defaultValue: state?.appLabel ?: APP_DISPLAY_NAME
+        }
         section("Application Details") {
             paragraph "Version: ${APP_VERSION}\nBranch: ${APP_BRANCH}\nLast Updated: ${APP_UPDATED}"
         }
@@ -49,14 +52,26 @@ def mainPage() {
 
 def installed() {
     log.info "Installed ${APP_DISPLAY_NAME} v${APP_VERSION}"
+    ensureAppLabel()
     initialize()
 }
 
 def updated() {
     log.info "Updated ${APP_DISPLAY_NAME} v${APP_VERSION}"
+    ensureAppLabel()
     initialize()
 }
 
 def initialize() {
     log.debug "Initialization complete for ${APP_DISPLAY_NAME}"
+}
+
+private void ensureAppLabel() {
+    String label = app?.getLabel()
+    if (label) {
+        state.appLabel = label
+    } else {
+        app?.updateLabel(APP_DISPLAY_NAME)
+        state.appLabel = APP_DISPLAY_NAME
+    }
 }

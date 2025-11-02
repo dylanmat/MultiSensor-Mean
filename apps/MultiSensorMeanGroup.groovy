@@ -38,7 +38,7 @@ preferences {
 def mainPage() {
     dynamicPage(name: "mainPage", title: GROUP_APP_DISPLAY_NAME, install: true, uninstall: true) {
         section("Group Configuration") {
-            label title: "Child device name", required: true, defaultValue: state?.childLabel
+            label title: "Child device name", required: true, defaultValue: state?.childLabel ?: "${APP_NAME_BASE} Average"
             input "monitoredDevices", "capability.sensor", title: "Select devices to average", multiple: true, required: true, submitOnChange: true
             input "updateMode", "enum", title: "Update mode", options: [["realtime":"Real-time (event driven)"], ["scheduled":"Scheduled refresh"]], required: true, submitOnChange: true, defaultValue: state?.updateMode ?: "realtime"
             if (updateMode == "scheduled") {
@@ -53,6 +53,7 @@ def mainPage() {
 
 def installed() {
     log.info "Installed ${GROUP_APP_DISPLAY_NAME} v${APP_VERSION}"
+    rememberChildLabel()
     initialize()
 }
 
@@ -60,6 +61,7 @@ def updated() {
     log.info "Updated ${GROUP_APP_DISPLAY_NAME} v${APP_VERSION}"
     unschedule()
     unsubscribe()
+    rememberChildLabel()
     initialize()
 }
 
@@ -211,6 +213,13 @@ private ensureChildDevice() {
     }
     state.childLabel = label
     return child
+}
+
+private void rememberChildLabel() {
+    String currentLabel = app?.getLabel()
+    if (currentLabel) {
+        state.childLabel = currentLabel
+    }
 }
 
 private void removeChildDevice() {
