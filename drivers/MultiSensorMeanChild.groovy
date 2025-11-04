@@ -1,8 +1,8 @@
 import groovy.transform.Field
 
-@Field static final String APP_VERSION = "0.0.5"
+@Field static final String APP_VERSION = "0.0.6"
 @Field static final String APP_BRANCH = "work"
-@Field static final String APP_UPDATED = "2025-11-01"
+@Field static final String APP_UPDATED = "2025-11-02"
 @Field static final String APP_NAME_BASE = "MultiSensor Mean"
 @Field static final String DEVICE_NAME = "MultiSensor Mean Child Device"
 
@@ -25,6 +25,8 @@ metadata {
         attribute "humidity", "number"
         attribute "illuminance", "number"
         attribute "ultravioletIndex", "number"
+        attribute "averagingSummary", "string"
+        attribute "deviceAttributeSummary", "string"
 
         command "clearAverages"
     }
@@ -50,6 +52,8 @@ void clearAverages() {
     ["temperature", "humidity", "illuminance", "ultravioletIndex"].each { attribute ->
         sendEvent(name: attribute, value: null)
     }
+    sendEvent(name: "averagingSummary", value: "No attributes configured")
+    sendEvent(name: "deviceAttributeSummary", value: "No devices configured")
 }
 
 void logsOff() {
