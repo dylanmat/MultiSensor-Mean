@@ -26,6 +26,7 @@ metadata {
         attribute "illuminance", "number"
         attribute "ultravioletIndex", "number"
         attribute "averagingSummary", "string"
+        attribute "deviceAttributeSummary", "string"
 
         command "clearAverages"
     }
@@ -52,6 +53,7 @@ void clearAverages() {
         sendEvent(name: attribute, value: null)
     }
     sendEvent(name: "averagingSummary", value: "No attributes configured")
+    sendEvent(name: "deviceAttributeSummary", value: "No devices configured")
 }
 
 void logsOff() {

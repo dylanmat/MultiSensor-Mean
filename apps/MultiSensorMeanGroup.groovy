@@ -60,6 +60,10 @@ def mainPage() {
             if (summaryAttributes) {
                 paragraph attributeSummaryDescription(summaryAttributes)
             }
+            String deviceStatusSummary = buildDeviceAttributeSummaryText(collectDeviceAttributeDetails(monitoredDevices))
+            if (deviceStatusSummary) {
+                paragraph "Devices:\n${deviceStatusSummary}"
+            }
         }
     }
 }
@@ -133,15 +137,42 @@ def updateAverages() {
         log.warn "Child device missing for ${app.label}; attempting to recreate."
         child = ensureChildDevice()
     }
-    if (!child || !monitoredDevices) {
+    if (!child) {
         return
     }
+
+    if (!monitoredDevices) {
+        child.sendEvent(name: "averagingSummary", value: "No devices configured")
+        child.sendEvent(name: "deviceAttributeSummary", value: "No devices configured")
+        clearUnusedChildAttributes([], child)
+        state.lastAveragedAttributes = []
+        state.lastDeviceCounts = [:]
+        state.lastDeviceAttributeDetails = []
+        return
+    }
+
+    List<Map<String, Object>> deviceDetails = collectDeviceAttributeDetails(monitoredDevices)
+    String deviceSummary = buildDeviceAttributeSummaryText(deviceDetails)
+    child.sendEvent(name: "deviceAttributeSummary", value: deviceSummary ?: "No devices configured")
 
     List<String> attributesToAverage = resolvedSelectedAttributes(true)
     if (!attributesToAverage) {
         child.sendEvent(name: "averagingSummary", value: "No attributes configured")
         clearUnusedChildAttributes([], child)
         state.lastDeviceCounts = [:]
+        state.lastAveragedAttributes = []
+        state.lastDeviceAttributeDetails = deviceDetails.collect { detail ->
+            List<String> attrs = []
+            def rawAttrs = detail.attributes
+            if (rawAttrs instanceof Collection) {
+                rawAttrs.each { attr ->
+                    if (attr) {
+                        attrs << attr.toString()
+                    }
+                }
+            }
+            [id: detail.id, name: detail.name, attributes: attrs]
+        }
         return
     }
 
@@ -190,6 +221,18 @@ def updateAverages() {
     state.lastAveragedAttributes = attributesToAverage
     state.lastDeviceCounts = attributesToAverage.collectEntries { attr ->
         [(attr): (deviceCounts[attr] ?: 0)]
+    }
+    state.lastDeviceAttributeDetails = deviceDetails.collect { detail ->
+        List<String> attrs = []
+        def rawAttrs = detail.attributes
+        if (rawAttrs instanceof Collection) {
+            rawAttrs.each { attr ->
+                if (attr) {
+                    attrs << attr.toString()
+                }
+            }
+        }
+        [id: detail.id, name: detail.name, attributes: attrs]
     }
 }
 
@@ -309,6 +352,59 @@ private String attributeSummaryDescription(List<String> attributes) {
         "${label}: ${count} device${count == 1 ? '' : 's'}"
     }.join("\n")
     return summary ?: "No attributes configured"
+}
+
+private List<Map<String, Object>> collectDeviceAttributeDetails(Collection devices) {
+    List<Map<String, Object>> details = []
+    if (!devices) {
+        return details
+    }
+
+    Integer index = 0
+    devices.each { device ->
+        details << [
+            id: (device?.id?.toString() ?: "${index}"),
+            name: deviceDisplayName(device, index),
+            attributes: supportedAveragingAttributes(device)
+        ]
+        index++
+    }
+    details
+}
+
+private String buildDeviceAttributeSummaryText(List<Map<String, Object>> deviceDetails) {
+    if (!deviceDetails) {
+        return null
+    }
+
+    deviceDetails.collect { Map<String, Object> detail ->
+        List<String> attributes = []
+        def rawAttributes = detail.attributes
+        if (rawAttributes instanceof Collection) {
+            rawAttributes.each { attr ->
+                if (attr) {
+                    attributes << attributeDisplayName(attr.toString())
+                }
+            }
+        }
+        String attributeText = attributes ? attributes.join(", ") : "No supported attributes"
+        "${detail.name}: ${attributeText}"
+    }.join("\n")
+}
+
+private String deviceDisplayName(device, Integer index = null) {
+    String label = device?.displayName ?: device?.name
+    if (!label) {
+        String fallbackId = device?.id?.toString()
+        if (fallbackId) {
+            label = "Device ${fallbackId}"
+        } else if (index != null) {
+            label = "Device ${index + 1}"
+        } else {
+            label = "Device"
+        }
+    }
+    label
 }
 
 private String buildAveragingSummary(List<String> attributes, Map<String, Integer> deviceCounts) {

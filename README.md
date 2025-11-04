@@ -1,7 +1,7 @@
 # MultiSensor-Mean
 
 ## Overview
-MultiSensor Mean Test is a Hubitat parent/child application that creates virtual child devices representing the mean values of illuminance, temperature, humidity, and ultraviolet index across one or more physical sensors. Each child device continuously reflects the average of its selected devices based on the configured update mode, and now surfaces a summary describing which attributes are included along with how many physical devices contributed to each average.
+MultiSensor Mean Test is a Hubitat parent/child application that creates virtual child devices representing the mean values of illuminance, temperature, humidity, and ultraviolet index across one or more physical sensors. Each child device continuously reflects the average of its selected devices based on the configured update mode, and now surfaces a summary describing which attributes are included, how many physical devices contributed to each average, and which devices (plus their supported attributes) participate in the group.
 
 The parent app hosts any number of averaging groups. Every group is defined through the bundled child app and is backed by the included virtual device driver so the aggregated values can participate in Rule Machine, dashboards, or any other Hubitat automations.
 
@@ -25,7 +25,7 @@ When you open a **MultiSensor Mean Test Group** child app you can:
   - **Real-time (event driven):** averages update immediately whenever one of the selected devices reports a new value for a tracked attribute.
   - **Scheduled refresh:** averages are recalculated on a timer that you define between 1 and 60 minutes to reduce hub load.
 
-The created child device automatically updates its own temperature, humidity, illuminance, and ultraviolet index attributes with the averaged values. You can use these values anywhere a regular Hubitat device attribute is accepted. The driver also includes a **Clear Averages** command that resets the stored attribute values if you want to start fresh, and an `averagingSummary` attribute that lists the enabled attributes along with the device counts that fed into each average so you can verify coverage at a glance.
+The created child device automatically updates its own temperature, humidity, illuminance, and ultraviolet index attributes with the averaged values. You can use these values anywhere a regular Hubitat device attribute is accepted. The driver also includes a **Clear Averages** command that resets the stored attribute values if you want to start fresh, an `averagingSummary` attribute that lists the enabled attributes along with the device counts that fed into each average so you can verify coverage at a glance, and a `deviceAttributeSummary` attribute that spells out each participating device together with the attributes it contributes.
 
 ## Version Metadata
 - **App Name:** MultiSenor Mean Test
@@ -34,7 +34,7 @@ The created child device automatically updates its own temperature, humidity, il
 - **Last Updated (PST/PDT):** 2025-11-02
 
 ## Changelog
-- **0.0.6** – Allow each group to pick the averaged attributes and surface a per-attribute device count summary both in the app UI and on the child device driver.
+- **0.0.6** – Allow each group to pick the averaged attributes, surface a per-attribute device count summary both in the app UI and on the child device driver, and publish a device/attribute roster on the child device so you can confirm participation details instantly.
 - **0.0.5** – Ensure real-time subscriptions and averaging only operate on attributes each device actually supports, and expose the averaged attribute list with `@Field` so Hubitat accepts the declaration.
 - **0.0.4** – Added default labels for the parent and child apps and preserved custom names so they survive installs and updates.
 - **0.0.3** – Defined SmartApp icons and the explicit parent reference used when creating child group apps.
