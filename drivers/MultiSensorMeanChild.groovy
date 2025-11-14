@@ -1,10 +1,10 @@
 import groovy.transform.Field
 
-@Field static final String APP_VERSION = "0.0.5"
+@Field static final String APP_VERSION = "0.0.6"
 @Field static final String APP_BRANCH = "work"
-@Field static final String APP_UPDATED = "2025-11-01"
-@Field static final String APP_NAME_BASE = "MultiSenor Mean"
-@Field static final String APP_NAME = APP_BRANCH == "main" ? APP_NAME_BASE : "${APP_NAME_BASE} Test"
+@Field static final String APP_UPDATED = "2025-11-02"
+@Field static final String APP_NAME_BASE = "MultiSensor Mean"
+@Field static final String DEVICE_NAME = "MultiSensor Mean Child Device"
 
 /**
  *  MultiSensor Mean Child Device
@@ -14,7 +14,7 @@ import groovy.transform.Field
  */
 
 metadata {
-    definition(name: "MultiSensor Mean Child Device", namespace: "multisensor.mean", author: "OpenAI Assistant") {
+    definition(name: DEVICE_NAME, namespace: "multisensor.mean", author: "OpenAI Assistant") {
         capability "Sensor"
         capability "TemperatureMeasurement"
         capability "RelativeHumidityMeasurement"
@@ -25,6 +25,8 @@ metadata {
         attribute "humidity", "number"
         attribute "illuminance", "number"
         attribute "ultravioletIndex", "number"
+        attribute "averagingSummary", "string"
+        attribute "deviceAttributeSummary", "string"
 
         command "clearAverages"
     }
@@ -35,11 +37,11 @@ metadata {
 }
 
 void installed() {
-    logInfo "Installed ${APP_NAME} child device"
+    logInfo "Installed ${DEVICE_NAME}"
 }
 
 void updated() {
-    logInfo "Updated ${APP_NAME} child device"
+    logInfo "Updated ${DEVICE_NAME}"
     if (logEnable) {
         runIn(1800, "logsOff")
     }
@@ -50,6 +52,8 @@ void clearAverages() {
     ["temperature", "humidity", "illuminance", "ultravioletIndex"].each { attribute ->
         sendEvent(name: attribute, value: null)
     }
+    sendEvent(name: "averagingSummary", value: "No attributes configured")
+    sendEvent(name: "deviceAttributeSummary", value: "No devices configured")
 }
 
 void logsOff() {
@@ -66,3 +70,4 @@ void logDebug(String message) {
 void logInfo(String message) {
     log.info message
 }
+
