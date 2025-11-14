@@ -20,3 +20,8 @@ APP_UPDATED=Should be the date of the last modification in PDT/PST
 README.md is a text file which should be updated to contain basic usage instructions and append each version change like a change log.
 
 Everything in this project is a text file.
+
+.gitattributes should contain:
+
+*.md text diff
+*.groovy text
