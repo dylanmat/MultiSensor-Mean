@@ -1,20 +1,20 @@
 import groovy.transform.Field
 
-@Field static final String APP_VERSION = "0.0.6"
+@Field static final String APP_VERSION = "0.1.0"
 @Field static final String APP_BRANCH = "work"
-@Field static final String APP_UPDATED = "2025-11-02"
-@Field static final String APP_NAME_BASE = "MultiSensor Mean"
-@Field static final String DEVICE_NAME = "MultiSensor Mean Child Device"
+@Field static final String APP_UPDATED = "2025-11-03"
+@Field static final String APP_NAME_BASE = "MultiSensor Average"
+@Field static final String DEVICE_NAME = "MultiSensor Average Child"
 
 /**
- *  MultiSensor Mean Child Device
+ *  MultiSensor Average Child
  *  Version: ${APP_VERSION}
  *  Branch: ${APP_BRANCH}
  *  Last Updated: ${APP_UPDATED}
  */
 
 metadata {
-    definition(name: DEVICE_NAME, namespace: "multisensor.mean", author: "OpenAI Assistant") {
+    definition(name: DEVICE_NAME, namespace: "dylanm.ma", author: "OpenAI Assistant") {
         capability "Sensor"
         capability "TemperatureMeasurement"
         capability "RelativeHumidityMeasurement"

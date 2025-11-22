@@ -1,20 +1,20 @@
 import groovy.transform.Field
 
-@Field static final String APP_VERSION = "0.0.5"
+@Field static final String APP_VERSION = "0.1.0"
 @Field static final String APP_BRANCH = "work"
-@Field static final String APP_UPDATED = "2025-11-01"
-@Field static final String APP_NAME_BASE = "MultiSensor Mean"
-@Field static final String APP_NAME = "MultiSensorMeanApp"
-@Field static final String APP_DISPLAY_NAME = "MultiSensor Mean App"
-@Field static final String CHILD_APP_NAME = "MultiSensorMeanGroup"
-@Field static final String APP_NAMESPACE = "multisensor.mean.app"
-@Field static final String CHILD_APP_NAMESPACE = "multisensor.mean.group"
+@Field static final String APP_UPDATED = "2025-11-03"
+@Field static final String APP_NAME_BASE = "MultiSensor Average"
+@Field static final String APP_NAME = "MultiSensor Average"
+@Field static final String APP_DISPLAY_NAME = "MultiSensor Average App"
+@Field static final String CHILD_APP_NAME = "MultiSensor Average Child"
+@Field static final String APP_NAMESPACE = "dylanm.ma"
+@Field static final String CHILD_APP_NAMESPACE = "dylanm.ma.child"
 @Field static final String ICON_URL = "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png"
 @Field static final String ICON_URL_2X = "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
 @Field static final String ICON_URL_3X = "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%403x.png"
 
 /**
- *  MultiSensor Mean App
+ *  MultiSensor Average App
  *  Version: ${APP_VERSION}
  *  Branch: ${APP_BRANCH}
  *  Last Updated: ${APP_UPDATED}

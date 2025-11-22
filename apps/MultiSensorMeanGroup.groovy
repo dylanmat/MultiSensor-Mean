@@ -1,20 +1,20 @@
 import groovy.transform.Field
 
-@Field static final String APP_VERSION = "0.0.6"
+@Field static final String APP_VERSION = "0.1.0"
 @Field static final String APP_BRANCH = "work"
-@Field static final String APP_UPDATED = "2025-11-02"
-@Field static final String APP_NAME_BASE = "MultiSensor Mean"
-@Field static final String GROUP_APP_NAME = "MultiSensorMeanGroup"
-@Field static final String GROUP_APP_DISPLAY_NAME = "MultiSensor Mean Group"
-@Field static final String APP_NAMESPACE = "multisensor.mean.group"
-@Field static final String PARENT_APP_NAMESPACE = "multisensor.mean.app"
-@Field static final String PARENT_APP_NAME = "MultiSensorMeanApp"
+@Field static final String APP_UPDATED = "2025-11-03"
+@Field static final String APP_NAME_BASE = "MultiSensor Average"
+@Field static final String GROUP_APP_NAME = "MultiSensor Average Child"
+@Field static final String GROUP_APP_DISPLAY_NAME = "MultiSensor Average Child"
+@Field static final String APP_NAMESPACE = "dylanm.ma.child"
+@Field static final String PARENT_APP_NAMESPACE = "dylanm.ma"
+@Field static final String PARENT_APP_NAME = "MultiSensor Average"
 @Field static final String ICON_URL = "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png"
 @Field static final String ICON_URL_2X = "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
 @Field static final String ICON_URL_3X = "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%403x.png"
 
 /**
- *  MultiSensor Mean Group
+ *  MultiSensor Average Child
  *  Version: ${APP_VERSION}
  *  Branch: ${APP_BRANCH}
  *  Last Updated: ${APP_UPDATED}
@@ -24,7 +24,7 @@ definition(
     name: GROUP_APP_NAME,
     namespace: APP_NAMESPACE,
     author: "OpenAI Assistant",
-    description: "Group configuration for MultiSensor Mean child devices.",
+    description: "Group configuration for MultiSensor Average child devices.",
     parent: PARENT_APP_NAMESPACE + ":" + PARENT_APP_NAME,
     iconUrl: ICON_URL,
     iconX2Url: ICON_URL_2X,
@@ -38,7 +38,7 @@ preferences {
 def mainPage() {
     dynamicPage(name: "mainPage", title: GROUP_APP_DISPLAY_NAME, install: true, uninstall: true) {
         section("Group Configuration") {
-            label title: "Child device name", required: true, defaultValue: state?.childLabel ?: "${APP_NAME_BASE} Average"
+            label title: "Child device name", required: true, defaultValue: state?.childLabel ?: GROUP_APP_DISPLAY_NAME
             input "monitoredDevices", "capability.sensor", title: "Select devices to average", multiple: true, required: true, submitOnChange: true
             input "updateMode", "enum", title: "Update mode", options: [["realtime":"Real-time (event driven)"], ["scheduled":"Scheduled refresh"]], required: true, submitOnChange: true, defaultValue: state?.updateMode ?: "realtime"
             if (updateMode == "scheduled") {
@@ -466,7 +466,7 @@ private String childDeviceNetworkId() {
 }
 
 private getChildDeviceLabel() {
-    return app.getLabel() ?: state.childLabel ?: "${APP_NAME_BASE} Average ${app.id}"
+    return app.getLabel() ?: state.childLabel ?: "${GROUP_APP_DISPLAY_NAME} ${app.id}"
 }
 
 private ensureChildDevice() {
@@ -475,7 +475,7 @@ private ensureChildDevice() {
     String label = getChildDeviceLabel()
     if (!child) {
         try {
-            child = addChildDevice("multisensor.mean", "MultiSensor Mean Child Device", dni, [name: label, label: label, isComponent: true])
+            child = addChildDevice("dylanm.ma", "MultiSensor Average Child", dni, [name: label, label: label, isComponent: true])
             log.info "Created child device '${label}' (${dni})"
         } catch (Exception ex) {
             log.error "Unable to create child device: ${ex.message}", ex
