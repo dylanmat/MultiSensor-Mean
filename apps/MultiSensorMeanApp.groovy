@@ -1,8 +1,8 @@
 import groovy.transform.Field
 
-@Field static final String APP_VERSION = "0.1.0"
+@Field static final String APP_VERSION = "0.1.1"
 @Field static final String APP_BRANCH = "work"
-@Field static final String APP_UPDATED = "2025-11-03"
+@Field static final String APP_UPDATED = "2025-11-21"
 @Field static final String APP_NAME_BASE = "MultiSensor Average"
 @Field static final String APP_NAME = "MultiSensor Average"
 @Field static final String APP_DISPLAY_NAME = "MultiSensor Average App"

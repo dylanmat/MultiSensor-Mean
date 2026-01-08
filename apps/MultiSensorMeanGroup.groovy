@@ -1,8 +1,8 @@
 import groovy.transform.Field
 
-@Field static final String APP_VERSION = "0.1.0"
+@Field static final String APP_VERSION = "0.1.1"
 @Field static final String APP_BRANCH = "work"
-@Field static final String APP_UPDATED = "2025-11-03"
+@Field static final String APP_UPDATED = "2025-11-21"
 @Field static final String APP_NAME_BASE = "MultiSensor Average"
 @Field static final String GROUP_APP_NAME = "MultiSensor Average Child"
 @Field static final String GROUP_APP_DISPLAY_NAME = "MultiSensor Average Child"
@@ -142,8 +142,8 @@ def updateAverages() {
     }
 
     if (!monitoredDevices) {
-        child.sendEvent(name: "averagingSummary", value: "No devices configured")
-        child.sendEvent(name: "deviceAttributeSummary", value: "No devices configured")
+        child.publishAveragedEvent("averagingSummary", "No devices configured")
+        child.publishAveragedEvent("deviceAttributeSummary", "No devices configured")
         clearUnusedChildAttributes([], child)
         state.lastAveragedAttributes = []
         state.lastDeviceCounts = [:]
@@ -153,11 +153,11 @@ def updateAverages() {
 
     List<Map<String, Object>> deviceDetails = collectDeviceAttributeDetails(monitoredDevices)
     String deviceSummary = buildDeviceAttributeSummaryText(deviceDetails)
-    child.sendEvent(name: "deviceAttributeSummary", value: deviceSummary ?: "No devices configured")
+    child.publishAveragedEvent("deviceAttributeSummary", deviceSummary ?: "No devices configured")
 
     List<String> attributesToAverage = resolvedSelectedAttributes(true)
     if (!attributesToAverage) {
-        child.sendEvent(name: "averagingSummary", value: "No attributes configured")
+        child.publishAveragedEvent("averagingSummary", "No attributes configured")
         clearUnusedChildAttributes([], child)
         state.lastDeviceCounts = [:]
         state.lastAveragedAttributes = []
@@ -204,20 +204,20 @@ def updateAverages() {
         if (data.values) {
             BigDecimal average = calculateAverage(data.values)
             String unit = data.unit
-            child.sendEvent(name: attr, value: formatValue(average, attr), unit: unit)
+            child.publishAveragedEvent(attr, formatValue(average, attr), unit)
         }
     }
 
     attributesToAverage.each { attr ->
         if (!aggregates.containsKey(attr) || !(aggregates[attr]?.values)) {
-            child.sendEvent(name: attr, value: null)
+            child.publishAveragedEvent(attr, null)
         }
     }
 
     clearUnusedChildAttributes(attributesToAverage, child)
 
     String summary = buildAveragingSummary(attributesToAverage, deviceCounts)
-    child.sendEvent(name: "averagingSummary", value: summary ?: "No attributes averaged")
+    child.publishAveragedEvent("averagingSummary", summary ?: "No attributes averaged")
     state.lastAveragedAttributes = attributesToAverage
     state.lastDeviceCounts = attributesToAverage.collectEntries { attr ->
         [(attr): (deviceCounts[attr] ?: 0)]
@@ -421,7 +421,7 @@ private String buildAveragingSummary(List<String> attributes, Map<String, Intege
 private void clearUnusedChildAttributes(List<String> activeAttributes, child) {
     List<String> inactiveAttributes = AVERAGED_ATTRIBUTES.findAll { !(activeAttributes?.contains(it)) }
     inactiveAttributes.each { attribute ->
-        child.sendEvent(name: attribute, value: null)
+        child.publishAveragedEvent(attribute, null)
     }
 }
 
