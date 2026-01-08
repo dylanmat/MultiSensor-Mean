@@ -29,11 +29,12 @@ The created child device automatically updates its own temperature, humidity, il
 
 ## Version Metadata
 - **App Name:** MultiSensor Average
-- **Version:** 0.1.0
+- **Version:** 0.1.1
 - **Branch:** work
-- **Last Updated (PST/PDT):** 2025-11-03
+- **Last Updated (PST/PDT):** 2025-11-21
 
 ## Changelog
+- **0.1.1** – Added a per-device option to log averaged attribute changes to the info log and routed all averaged events through the driver so it can honor logging preferences.
 - **0.1.0** – Renamed the apps and driver to MultiSensor Average, updated namespaces to `dylanm.ma`/`dylanm.ma.child`, and refreshed defaults to create the new child app and device names.
 - **0.0.6** – Allow each group to pick the averaged attributes, surface a per-attribute device count summary both in the app UI and on the child device driver, and publish a device/attribute roster on the child device so you can confirm participation details instantly.
 - **0.0.5** – Ensure real-time subscriptions and averaging only operate on attributes each device actually supports, and expose the averaged attribute list with `@Field` so Hubitat accepts the declaration.
